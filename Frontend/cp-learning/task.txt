@@ -1,0 +1,4 @@
+1. User login and authentication (shivam)- done
+2.Taking users Codeforces id and saving it to the backend(shivam)-done
+3. Verifying the id(shivam)
+4.Making all and testing all codeforces api routes(shivam)
