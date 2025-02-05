@@ -1,25 +1,24 @@
+
 import { connectToDB } from "@/lib/dbConnect";
 import User from "@/models/user";
 
-export async function POST(req) {
+
+export async function GET(req,{params}) {
     try {
         await connectToDB(); // Connect to MongoDB
-        const { username, userId } = await req.json();
+        const { userId } = await params;
 
         // Check if user already exists
         const existingUser = await User.findOne({ userId });
         if (existingUser) {
+            return new Response(JSON.stringify(existingUser), { status: 201 });
+        }
+        else {
             return new Response(JSON.stringify({ message: "User already exists" }), { status: 203});
         }
 
-        // Create a new user if not found
-        const user = await User.create({ username, userId });
-
-        return new Response(JSON.stringify(user), { status: 201 });
     } catch (error) {
         console.error(error);
         return new Response(JSON.stringify({ message: "Server error" }), { status: 500 });
     }
 }
-
-

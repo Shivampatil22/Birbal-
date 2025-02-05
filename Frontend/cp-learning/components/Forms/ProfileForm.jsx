@@ -19,6 +19,13 @@ import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 
+
+
+import toast, { Toaster } from "react-hot-toast";
+import { isValidUser } from "@/lib/codeforces";
+
+
+
 const formSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
@@ -36,17 +43,29 @@ export function ProfileForm() {
   const { user } = useUser();
   const router = useRouter();
 
+
+  const notify = () => toast.success("Verified");
+  const notifyError = () => toast.error("Invalid User");
+
   async function onSubmit(values) {
     try {
       setLoading(true);
       console.log(values);
       const { username } = values;
+
+      const result=await isValidUser(username);
+      if(!result){
+        notifyError();
+        return;
+      }
+
       const userId = user.id;
-      console.log(user);
+       
       const response = await axios.post("http://localhost:3000/api/user", {
         username,
         userId,
       });
+      notify();
       console.log(response.data);
       router.push(`/${username}`);
     } catch (error) {
@@ -62,6 +81,7 @@ export function ProfileForm() {
         onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8 w-96 border-black border-2 p-5 rounded-md"
       >
+        <Toaster/>
         <FormField
           control={form.control}
           name="username"
