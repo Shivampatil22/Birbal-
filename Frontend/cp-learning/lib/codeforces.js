@@ -30,14 +30,17 @@ const getProblemsByRatingAndTags = async (rating, tags) => {
     try {
 
         const formattedTags = Array.isArray(tags) ? tags.join(";") : tags;
+    //    console.log(formattedTags);  
         const response = await axios.get(`${BASE_URL}/problemset.problems`, {
             params: { tags: formattedTags },
         });
+        
 
         const result= response.data.result.problems
             .filter((problem) => problem.rating === rating)
-            .slice(0, 10);
-        console.log(result);
+            .slice(0, 200);
+        
+        return result;
     } catch (error) {
         console.error("Error fetching problems:", error);
         return [];

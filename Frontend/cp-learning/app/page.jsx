@@ -25,6 +25,7 @@ const result = await axios.get(url);
   
   return <div className='w-full h-full   flex flex-col  items-center'>
     <Nav />
+
       <ProfileForm />
 
  

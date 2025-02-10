@@ -6,7 +6,7 @@ import User from "@/models/user";
 export async function POST(req, { params }) {
     try {
         await connectToDB(); // Connect to MongoDB
-        const { username } = params;
+        const { username } =await params;
 
         // Step 1: Get user info
         let userInfo = await getUserInfo(username);
@@ -23,7 +23,7 @@ export async function POST(req, { params }) {
         const prompt = `
             Analyze the following Codeforces user data and provide a summary. Keep it short and to the point.
             Suggest a rating level for problems they should solve to improve their rating by 100.
-            Also, suggest problem tags they should focus on.
+            Also, suggest only 3 major problem tags they should focus on.
             
             User Data:
             Handle: ${userInfo.handle}
@@ -47,11 +47,11 @@ export async function POST(req, { params }) {
         // Remove unwanted Markdown formatting (` ```json ` and ` ``` `)
         const cleanedResponse = analysis.replace(/```json|```/g, "").trim();
         const parsedAnalysis = JSON.parse(cleanedResponse);
-
+        console.log("Got AI response");
         // Step 5: Save summary and tags to the user in MongoDB
         const updatedUser = await User.findOneAndUpdate(
             { username },
-            { summary: parsedAnalysis.summary, tags: parsedAnalysis.tags },
+            { summary: parsedAnalysis.summary, tags: parsedAnalysis.tags,current_rating:parsedAnalysis.rating_to_solve-100 },
             { new: true, upsert: true }
         );
 

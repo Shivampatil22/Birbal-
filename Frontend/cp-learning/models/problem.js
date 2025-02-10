@@ -9,5 +9,5 @@ const ProblemSchema = new Schema({
     tags: { type: [String], required: true },
 });
 
-export const Problem = models.Problem||model("Problem", ProblemSchema);
-
+ const Problem = models.Problem||model("Problem", ProblemSchema);
+export default Problem;
