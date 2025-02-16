@@ -57,13 +57,13 @@ const parseProblemData = (scrapedText) => {
                 currentExample = {}; // Reset for next example
             }
         }
-         else if (section === "input") {
+        else if (section === "input") {
             inputDescription.push(line);
         } else if (section === "output") {
             outputDescription.push(line);
         } else if (section === "explanation") {
             explanations.push(line);
-        } 
+        }
     }
 
     return {
@@ -78,7 +78,7 @@ const parseProblemData = (scrapedText) => {
     };
 };
 
- const FetchQuestion = async (constestId,index) => {
+const FetchQuestion = async (constestId, index) => {
     const now = Date.now();
 
     if (now - lastCallTime < 3000) {

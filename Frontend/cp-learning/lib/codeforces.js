@@ -25,25 +25,56 @@ const isValidUser = async (handle) => {
     }
 };
 
-// 3. Get 10 problems of a given rating and tags
+// // 3. Get 10 problems of a given rating and tags
+// const getProblemsByRatingAndTags = async (rating, tags) => {
+//     try {
+
+//         const formattedTags = Array.isArray(tags) ? tags.join(";") : tags;
+//     //    console.log(formattedTags);  
+//         const response = await axios.get(`${BASE_URL}/problemset.problems`, {
+//             params: { tags: formattedTags },
+//         });
+        
+
+//         const result= response.data.result.problems
+            
+//         console.log(result);
+        
+//         return result;
+//     } catch (error) {
+//         console.error("Error fetching problems:", error);
+//         return [];
+//     }
+// };
+
 const getProblemsByRatingAndTags = async (rating, tags) => {
     try {
+        if (!Array.isArray(tags)) {
+            throw new Error("Tags must be an array.");
+        }
 
-        const formattedTags = Array.isArray(tags) ? tags.join(";") : tags;
-    //    console.log(formattedTags);  
-        const response = await axios.get(`${BASE_URL}/problemset.problems`, {
-            params: { tags: formattedTags },
-        });
-        
+        let problemsByTag = {};
 
-        const result= response.data.result.problems
-            .filter((problem) => problem.rating === rating)
-            .slice(0, 200);
-        
-        return result;
+        for (const tag of tags) {
+            const response = await axios.get(`${BASE_URL}/problemset.problems`, {
+                params: { tags: tag },
+            });
+
+            const problems = response.data.result.problems
+                .filter(problem =>
+                    problem.rating >= rating &&
+                    problem.rating <= rating + 100
+                )
+                .slice(0, 100); // Get only 100 problems per tag
+
+            problemsByTag[tag] = problems;
+        }
+
+        console.log(problemsByTag["greedy"].length);
+        return problemsByTag;
     } catch (error) {
         console.error("Error fetching problems:", error);
-        return [];
+        return {};
     }
 };
 

@@ -23,7 +23,7 @@ export async function POST(req, { params }) {
         const prompt = `
             Analyze the following Codeforces user data and provide a summary. Keep it short and to the point.
             Suggest a rating level for problems they should solve to improve their rating by 100.
-            Also, suggest only 3 major problem tags they should focus on.
+            Also, suggest only 3 major problem tags they should focus on to improve their rank.
             
             User Data:
             Handle: ${userInfo.handle}

@@ -13,18 +13,18 @@ export default async function Page() {
   
   if (!userId) return redirectToSignIn()
     console.log(userId);
-  let url=`http://localhost:3000/api/user/${userId}`;
+  let url=`http://localhost:3000/api/user/id/${userId}`;
   // console.log(url);
 const result = await axios.get(url);
 
-  //  console.log(result.data)
+   console.log(result.data)
   if(result.status==201){
     
-     return redirect(`/${result.data.username}`);
+     return redirect(`/profile`);
   }
   
   return <div className='w-full h-full   flex flex-col  items-center'>
-    <Nav />
+  
 
       <ProfileForm />
 

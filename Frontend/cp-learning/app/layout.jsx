@@ -1,6 +1,8 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import Nav from "@/components/Common/Nav";
+import { Separator } from "@/components/ui/separator";
 
 
 
@@ -28,14 +30,14 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased `}
         >
-         <main className="w-full  min-h-screen  flex flex-col">
+          <main className="w-full  min-h-screen  flex flex-col">
             <div className="w-full h-full flex flex-col items-center justify-center ">
+              <Nav />
+              <Separator />
+              
               {children}
             </div>
-          
-         </main>
-       
-
+          </main>
         </body>
       </ClerkProvider>
     </html>

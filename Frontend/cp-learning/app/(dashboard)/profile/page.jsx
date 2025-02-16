@@ -1,20 +1,19 @@
 
 
 import ProfileData from "@/components/Profile/ProfileData";
-import ProfileSideBar from "@/components/Profile/ProfileSidebar";
+import { auth } from "@clerk/nextjs/server";
 
 
 
 
-
-const Page = async({params}) => {
-  const { profile_id } =await params;
+const Page = async() => {
  
+    const { userId } = await auth();
 
   
   return (
     <div className="w-full h-full flex   px-6  text-3xl font-bold">
-     <ProfileData profile_id={profile_id} />
+     <ProfileData profile_id={userId} />
     </div>
   );
 }

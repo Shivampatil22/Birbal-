@@ -11,8 +11,9 @@ const ProfileData = ({profile_id}) => {
      }, []);
     const getProfileData = async () => {
           const result = await axios.get(
-            `http://localhost:3000/api/user/${profile_id}`
+            `http://localhost:3000/api/user/id/${profile_id}`
           );
+          console.log(result.data);
           setProfile(result.data);
     };
 
@@ -20,9 +21,9 @@ const ProfileData = ({profile_id}) => {
         try {
              setLoading(true);
            const result = await axios.post(
-             `http://localhost:3000/api/analyze/${profile_id}`
+             `http://localhost:3000/api/analyze/${profile.username}`
            );
-           console.log(result.data);
+          
            setProfile(result.data);  
         } catch (error) {
             console.error(error);
