@@ -7,14 +7,17 @@ import axios from 'axios';
 import { redirect} from 'next/navigation';
 
 
+
+
+
 export default async function Page() {
   const { userId, redirectToSignIn } = await auth()
 
   
   if (!userId) return redirectToSignIn()
     console.log(userId);
+  
   let url=`http://localhost:3000/api/user/id/${userId}`;
-  // console.log(url);
 const result = await axios.get(url);
 
    console.log(result.data)

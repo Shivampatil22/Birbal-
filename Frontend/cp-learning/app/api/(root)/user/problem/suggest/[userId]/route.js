@@ -6,7 +6,6 @@ export async function GET(req, { params }) {
     try {
         await connectToDB(); // Ensure database connection
         const { userId } =await  params; // No need for `await` here
-
         // Check if user already exists
         const existingUser = await User.findOne({ userId }).populate("suggested_problems");
 

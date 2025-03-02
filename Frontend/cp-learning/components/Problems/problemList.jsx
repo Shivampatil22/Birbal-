@@ -7,7 +7,7 @@ import { Button } from '../ui/button';
 
 const ProblemList = ({userId}) => {
     const [problems, setProblems] = useState([]);   
-    
+    const [loading ,setloading]=useState(false)
      useEffect(()=>{
 
         getUserProblem();
@@ -20,12 +20,22 @@ const ProblemList = ({userId}) => {
 
     }
     const generateProblems = async () => {
-        const response = await axios.post(`/api/suggest/${userId}`);
-        let data = await response.data;
-        console.log(data);
+       try {
+        setloading(true)
+             const response = await axios.post(`/api/suggest/${userId}`);
+             let data = await response.data;
+             console.log(data);
+             getUserProblem(); 
+       } catch (error) {
+        console.log(error)
+       } 
+       finally{
+        setloading(false)
+       }
+   
     
     }
-  if(problems.no_of_problems==undefined){
+  if(loading==true){
     return (
       <div className="w-full flex h-full justify-center items-center ">
         <div className="w-10 h-10 border-2 border-t-transparent border-black rounded-full animate-spin"></div>

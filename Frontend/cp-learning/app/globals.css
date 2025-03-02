@@ -7,6 +7,10 @@ body {
   margin: 0;
   padding: 0;
 }
+::-webkit-scrollbar {
+  display: none;
+  /* Hide scrollbar for Webkit browsers (Chrome, Safari) */
+}
 
 @layer base {
   :root {

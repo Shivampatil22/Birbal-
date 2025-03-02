@@ -4,7 +4,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import Nav from "@/components/Common/Nav";
 import { Separator } from "@/components/ui/separator";
 
-
+import { Toaster } from "react-hot-toast";
 
 
 const geistSans = Geist({
@@ -30,6 +30,7 @@ export default function RootLayout({ children }) {
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased `}
         >
+          <Toaster/>
           <main className="w-full  min-h-screen  flex flex-col">
             <div className="w-full h-full flex flex-col items-center justify-center ">
               <Nav />

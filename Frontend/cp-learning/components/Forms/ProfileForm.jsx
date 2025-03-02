@@ -67,7 +67,7 @@ export function ProfileForm() {
       });
       notify();
       console.log(response.data);
-      router.push(`/${username}`);
+      router.push(`/profile`);
     } catch (error) {
       console.error(error);
     } finally {
