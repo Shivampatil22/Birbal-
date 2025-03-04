@@ -4,6 +4,9 @@ import ProblemDescription from "@/components/Problem_code/problemDescription";
 import Tabswitch from "@/components/Problem_code/Tabswitch";
 
 
+
+import { auth } from "@clerk/nextjs/server";
+
 import {
   ResizableHandle,
   ResizablePanel,
@@ -12,9 +15,11 @@ import {
 
 
 
+
 const page =async ({params}) => {
     const {contestId, index} =await  params;
-
+    const { userId } = await auth()
+    
     const problemData = {
       problem_name: "A. Cut Ribbon",
       time_limit: "1 second",
@@ -50,11 +55,12 @@ const page =async ({params}) => {
       className="w-full min-h-[91.5vh] max-h-[91.5vh] flex bg-[#151515] p-3 text-white"
     >
       <ResizablePanel defaultSize={50}>
-        <ProblemDescription problemData={problemData} />
+        <ProblemDescription problemData={problemData} contestId={contestId} index={index} />
+        
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={50}>
-        <Tabswitch/>
+        <Tabswitch contestId={contestId} index={index} userId={userId}/>
       </ResizablePanel>
     </ResizablePanelGroup>
   );

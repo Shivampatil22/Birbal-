@@ -1,17 +1,26 @@
 
+import { getUserSubmissions } from "@/lib/codeforces";
 import { connectToDB } from "@/lib/dbConnect";
 import User from "@/models/user";
 
 
 export async function GET(req, { params }) {
     try {
-        await connectToDB(); 
+        await connectToDB();
         const { userId } = await params;
-
-        // Check if user already exists
         const existingUser = await User.findOne({ userId: userId });
+        
+        const username=existingUser.username;
+        let submission= await getUserSubmissions(username)
+        submission = submission[0];
+        
+        let result={
+            contestId:submission.problem.contestId,
+            index: submission.problem.index,
+            verdict:submission.verdict
+        }
         if (existingUser) {
-            return new Response(JSON.stringify(existingUser), { status: 201 });
+            return new Response(JSON.stringify(result), { status: 201 });
         }
         else {
             return new Response(JSON.stringify({ message: "new user" }), { status: 203 });

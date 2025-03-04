@@ -1,6 +1,7 @@
 
 import { Notebook } from "lucide-react";
-const ProblemDescription = ({problemData}) => {
+import { Separator } from "../ui/separator";
+const ProblemDescription = ({problemData,contestId,index}) => {
       const {
         problem_name,
         time_limit,
@@ -62,6 +63,18 @@ const ProblemDescription = ({problemData}) => {
             );
           })}
         </div>
+      </div>
+      <Separator />
+      <div className="w-full flex p-4 min-h-20 items-center">
+        Problem Link -
+        <a
+          href={`https://codeforces.com/contest/${contestId}/problem/${index}`}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          https://codeforces.com/contest/{contestId}/problem/{index}
+        </a>
+        
       </div>
     </section>
   );

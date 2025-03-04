@@ -7,10 +7,10 @@ import CodeSection from "./CodeSection";
 
 const tabs = [
   { id: "code", label: "Code" },
-  { id: "ai", label: "Bribal" },
+  { id: "ai", label: "Birbal" },
 ];
 
-const Tabswitch = () => {
+const Tabswitch = ({contestId,index,userId}) => {
   const [activeTab, setActiveTab] = useState("code");
   const [filetype, setFiletype] = useState("Cpp");
   const [code, setCode] = useState("Start coding");
@@ -52,6 +52,9 @@ const Tabswitch = () => {
             setCode={setCode}
             filetype={filetype}
             setFiletype={setFiletype}
+            contestId={contestId}
+            index={index}
+            userId={userId}
           />
         </div>
 
