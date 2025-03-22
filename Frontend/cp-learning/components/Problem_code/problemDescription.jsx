@@ -1,7 +1,7 @@
 
 import { Notebook } from "lucide-react";
 import { Separator } from "../ui/separator";
-const ProblemDescription = ({problemData,contestId,index}) => {
+const ProblemDescription = ({problemData,contestId,index,contest}) => {
       const {
         problem_name,
         time_limit,
@@ -26,9 +26,12 @@ const ProblemDescription = ({problemData,contestId,index}) => {
         </span>
       </div>
       <div className="p-4">
-        <span className="my-2 text-[1.5rem] font-bold ml-1">
-          {problem_name}
-        </span>
+        {!contest && (
+          <span className="my-2 text-[1.5rem] font-bold ml-1">
+            {problem_name}
+          </span>
+        )}
+
         <div>{problem_description}</div>
         <div className="flex flex-col w-full my-3 ">
           <span className="text-xl font-semibold">Input description</span>
@@ -65,17 +68,18 @@ const ProblemDescription = ({problemData,contestId,index}) => {
         </div>
       </div>
       <Separator />
-      <div className="w-full flex p-4 min-h-20 items-center">
-        Problem Link -
-        <a
-          href={`https://codeforces.com/contest/${contestId}/problem/${index}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          https://codeforces.com/contest/{contestId}/problem/{index}
-        </a>
-        
-      </div>
+      {!contest && (
+        <div className="w-full flex p-4 min-h-20 items-center">
+          Problem Link -
+          <a
+            href={`https://codeforces.com/contest/${contestId}/problem/${index}`}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            https://codeforces.com/contest/{contestId}/problem/{index}
+          </a>
+        </div>  
+      )}
     </section>
   );
 }

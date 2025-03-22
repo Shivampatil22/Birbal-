@@ -152,7 +152,7 @@ monaco.languages.registerCompletionItemProvider("cpp", {
   };
 
   return (
-    <div className="w-full flex flex-1 min-h-full bg-[#272727] rounded-lg p-4">
+    <div className="w-full flex flex-1 min-h-max max-h-max bg-[#272727] rounded-lg p-4">
       {filetype == "Cpp" ? (
         <>
           <Editor

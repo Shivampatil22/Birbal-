@@ -19,8 +19,17 @@ export default async function Page() {
   
   let url=`http://localhost:3000/api/user/id/${userId}`;
 const result = await axios.get(url);
-
-   console.log(result.data)
+ 
+   
+  //  const user=result.data;
+  //  const {username,current_rating,tags,imageUrl}=user;
+  //  const userInfo={
+  //   username,
+  //   current_rating,
+  //   tags,
+  //   imageUrl
+  //  }
+  //  console.log(userInfo);
   if(result.status==201){
     
      return redirect(`/profile`);

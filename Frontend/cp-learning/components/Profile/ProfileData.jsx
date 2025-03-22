@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import ProfileSideBar from "./ProfileSidebar";
 import Summary from "./Summary";
 import toast from "react-hot-toast";
+import { useBattleStore } from "@/lib/store";
 const ProfileData = ({profile_id}) => {
     const [profile, setProfile] = useState({});
     const [loading, setLoading] = useState(false);
     const analyzeTost = () => toast.success("analysis completed");
-
+    const {setUserInfo}=useBattleStore();
 
      useEffect(() => {
           getProfileData();
@@ -17,11 +18,21 @@ const ProfileData = ({profile_id}) => {
 
 
     const getProfileData = async () => {
-          const result = await axios.get(
-            `http://localhost:3000/api/user/id/${profile_id}`
-          );
-          console.log(result.data);
-          setProfile(result.data);
+      const result = await axios.get(
+        `http://localhost:3000/api/user/id/${profile_id}`
+      );
+   
+       const user=result.data;
+       const {username,current_rating,tags,imageUrl}=user;
+       const userInfo={
+        username,
+        current_rating,
+        tags,
+        imageUrl
+       }
+       console.log(userInfo);
+      setUserInfo(userInfo);
+      setProfile(result.data);
     };
 
     const analyzeProfile = async () => {

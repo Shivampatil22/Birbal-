@@ -5,12 +5,15 @@ import { motion } from "framer-motion";
 import { Bot, Code } from "lucide-react";
 import CodeSection from "./CodeSection";
 
-const tabs = [
-  { id: "code", label: "Code" },
-  { id: "ai", label: "Birbal" },
-];
+const Tabswitch = ({ contestId, index, userId, contest }) => {
+  // Filter tabs based on contest mode
+  const availableTabs = contest
+    ? [{ id: "code", label: "Code" }]
+    : [
+        { id: "code", label: "Code" },
+        { id: "ai", label: "Birbal" },
+      ];
 
-const Tabswitch = ({contestId,index,userId}) => {
   const [activeTab, setActiveTab] = useState("code");
   const [filetype, setFiletype] = useState("Cpp");
   const [code, setCode] = useState("Start coding");
@@ -19,7 +22,7 @@ const Tabswitch = ({contestId,index,userId}) => {
     <div className="w-full flex flex-col bg-[#272727] rounded-tr-lg rounded-tl-lg h-full">
       {/* Tabs List */}
       <div className="flex gap-4 border-b h-11 bg-[#393939] px-2 rounded-tr-lg rounded-tl-lg border-gray-700 pb-2">
-        {tabs.map((tab) => (
+        {availableTabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
@@ -43,10 +46,10 @@ const Tabswitch = ({contestId,index,userId}) => {
         ))}
       </div>
 
-      {/* Tabs Content - Keep Mounted */}
+      {/* Tabs Content */}
       <div className="relative w-full h-full">
-        {/* Code Tab (Always Mounted, but Hidden if Not Active) */}
-        <div className={activeTab === "code" ? "block" : "hidden"}>
+        {/* Code Tab */}
+        {activeTab === "code" && (
           <CodeSection
             code={code}
             setCode={setCode}
@@ -56,15 +59,17 @@ const Tabswitch = ({contestId,index,userId}) => {
             index={index}
             userId={userId}
           />
-        </div>
+        )}
 
-        {/* AI Bot Tab (Always Mounted, but Hidden if Not Active) */}
-        <div className={activeTab === "ai" ? "block" : "hidden"}>
-          <h3 className="text-lg font-semibold">AI Bot</h3>
-          <div className="mt-2 text-gray-300">
-            Your AI assistant will go here.
+        {/* AI Bot Tab (Hidden if contest is true) */}
+        {!contest && activeTab === "ai" && (
+          <div>
+            <h3 className="text-lg font-semibold">AI Bot</h3>
+            <div className="mt-2 text-gray-300">
+              Your AI assistant will go here.
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

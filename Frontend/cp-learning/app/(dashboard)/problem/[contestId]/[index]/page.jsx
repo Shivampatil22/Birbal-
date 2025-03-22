@@ -1,5 +1,4 @@
-import CodeEditor from "@/components/Problem_code/codeEditor";
-import CodeSection from "@/components/Problem_code/CodeSection";
+
 import ProblemDescription from "@/components/Problem_code/problemDescription";
 import Tabswitch from "@/components/Problem_code/Tabswitch";
 
