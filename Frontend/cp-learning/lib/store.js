@@ -1,28 +1,35 @@
-const { io } = require("socket.io-client");
-const { create } = require("zustand");
-const { persist } = require("zustand/middleware");
+import { io } from "socket.io-client";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 export const useBattleStore = create(
     persist(
         (set, get) => ({
-            socket: null, // Socket should not be persisted
+            socket: null, // Do not persist socket
 
             userInfo: {},
             roomId: null,
+            roomData: {},
 
             connectSocket: () => {
                 if (!get().socket) {
                     const socket = io("http://localhost:8000");
 
-                    // Register matchFound event once
+                    // Register event listeners
                     socket.on("matchFound", ({ roomId }) => {
-                        console.log(`Match Found! Room: ${roomId}`);
-                        set({ roomId }); // Store roomId in Zustand
+                        console.log("✅ Match Found! Room:", roomId);
+                        set((state) => ({ ...state, roomId })); // Ensure reactivity
+                    });
+
+                    socket.on("getRoomdata", ({ roomData }) => {
+                        console.log("📌 Received Room Data:", roomData);
+                        set((state) => ({ ...state, roomData }));
                     });
 
                     set({ socket });
                 }
             },
+
             disconnectSocket: () => {
                 const socket = get().socket;
                 if (socket) {
@@ -35,14 +42,18 @@ export const useBattleStore = create(
                 set({ userInfo: { ...data, timestamp: Date.now() } });
             },
 
+            setRoomData: (data) => {
+                set({ roomData: data });
+            },
+
             clearUserInfo: () => {
                 set({ userInfo: {} });
-            }
+            },
         }),
         {
             name: "battle-store",
             getStorage: () => sessionStorage, // Use sessionStorage
-            partialize: (state) => ({ userInfo: state.userInfo }), // Exclude 'socket' from persistence
+            partialize: (state) => ({ userInfo: state.userInfo }), // Exclude socket from persistence
             onRehydrateStorage: () => (state) => {
                 if (state?.userInfo?.timestamp) {
                     const isExpired = Date.now() - state.userInfo.timestamp > 6 * 60 * 60 * 1000; // 6 hours
@@ -50,7 +61,7 @@ export const useBattleStore = create(
                         state.userInfo = {}; // Clear expired data
                     }
                 }
-            }
+            },
         }
     )
 );

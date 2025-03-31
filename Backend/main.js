@@ -73,13 +73,13 @@ io.on("connection", (socket) => {
                     problem:problem
                 }
                 console.log(roomData);
-                const roomId=`battle${socket.id}&${opponent.socketId}`
-               battleRooms[roomId]=roomData;
+                const roomId=`battle${socket.id}_${opponent.socketId}`
+                battleRooms[roomId]=roomData;
 
                 // Make both players join the room
-                socket.join(roomId);
-                io.to(opponent.socketId).emit("joinRoom", { roomId });
-                io.to(roomId).emit("matchFound", { roomId });
+                // socket.join(roomId);
+                io.to(opponent.socketId).emit("matchFound", { roomId });
+                io.to(socket.id).emit("matchFound", { roomId });
                
             }
             else{
@@ -99,7 +99,7 @@ io.on("connection", (socket) => {
         } else {
             // No opponent available, add user to waiting list
             waitingList.push(userDetails);
-            console.log(`User added to waiting list: ${socket.id}`);
+            console.log(`User added to waiing list: ${socket.id}`);
             console.log(waitingList);
         }
     });
@@ -107,11 +107,14 @@ io.on("connection", (socket) => {
     socket.on("joinRoom", ({ roomId }) => {
         socket.join(roomId);
         console.log(`User ${socket.id} joined room: ${roomId}`);
-
-        // 
+        socket.emit("getRoomdata",{roomData:battleRooms[roomId]});
     });
 
 
+    socket.on("submitResponse",({response})=>{
+        socket.emit("saveResponse",{response})
+    })
+    
     // User presses "Stop Finding"
     socket.on("stopFinding", () => {
         console.log(socket.id);
@@ -128,7 +131,6 @@ io.on("connection", (socket) => {
             console.log(`Battle over. Winner: ${userId}`);
         }
     });
-
 
     // Handle disconnects
     socket.on("disconnect", () => {
