@@ -16,7 +16,7 @@ export async function POST(req, { params }) {
         console.log("Got userInfo");
 
         // Step 2: Get user submissions
-        const userSubmissions = await getUserSubmissions(username);
+        const userSubmissions = await getUserSubmissions(username,20);
         console.log("Got user submissions");
 
         // Step 3: Create a prompt for AI analysis

@@ -11,7 +11,7 @@ export async function GET(req, { params }) {
         const existingUser = await User.findOne({ userId: userId });
         
         const username=existingUser.username;
-        let submission= await getUserSubmissions(username)
+        let submission= await getUserSubmissions(username,10)
         submission = submission[0];
         
         let result={

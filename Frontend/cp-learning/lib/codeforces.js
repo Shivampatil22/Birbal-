@@ -79,10 +79,10 @@ const getProblemsByRatingAndTags = async (rating, tags) => {
 };
 
 // 4. Get the first 100 submissions of a user
-const getUserSubmissions = async (handle) => {
+const getUserSubmissions = async (handle,count) => {
     try {
         const response = await axios.get(`${BASE_URL}/user.status`, {
-            params: { handle, from: 1, count: 20 },
+            params: { handle, from: 1, count: count },
         });
         return response.data.result;
     } catch (error) {

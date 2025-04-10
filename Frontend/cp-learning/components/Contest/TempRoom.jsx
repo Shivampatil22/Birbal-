@@ -15,11 +15,12 @@ import { useUser } from "@clerk/nextjs";
 const RoomComp = ({ roomid}) => {
  
   const { userId } = useUser();
-  const { socket } = useBattleStore();
+  const { socket,problem } = useBattleStore();
 
   useEffect(() => {
     console.log(roomid);
     socket.emit("joinRoom", {roomId: roomid });
+    socket.emit("getRoomdata", { roomId: roomid });
   }, [roomid, socket]);
 
   const contestId = "109",
@@ -50,12 +51,16 @@ const RoomComp = ({ roomid}) => {
       className="w-full min-h-[91.5vh] max-h-[91.5vh] flex bg-[#151515] p-3 text-white"
     >
       <ResizablePanel defaultSize={50}>
-        <ProblemDescription
-          problemData={problemData}
-          contestId={contestId}
-          index={index}
-          contest={true}
-        />
+        {problem && (
+          <>
+            <ProblemDescription
+              problemMeta={problem}
+              contestId={problem.contestId}
+              index={problem.index}
+              contest={true}
+            />
+          </>
+        )}
       </ResizablePanel>
       <ResizableHandle />
       <ResizablePanel defaultSize={50}>

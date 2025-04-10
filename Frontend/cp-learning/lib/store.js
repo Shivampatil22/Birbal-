@@ -8,22 +8,22 @@ export const useBattleStore = create(
             socket: null, // Do not persist socket
 
             userInfo: {},
-            roomId: null,
             roomData: {},
+            problem:{},
 
             connectSocket: () => {
                 if (!get().socket) {
                     const socket = io("http://localhost:8000");
 
                     // Register event listeners
-                    socket.on("matchFound", ({ roomId }) => {
+                    socket.on("matchFound", ({ roomId,opponent }) => {
                         console.log("✅ Match Found! Room:", roomId);
-                        set((state) => ({ ...state, roomId })); // Ensure reactivity
+                        set((state) => ({ ...state, roomData:{roomId,opponent} })); // Ensure reactivity
                     });
 
-                    socket.on("getRoomdata", ({ roomData }) => {
-                        console.log("📌 Received Room Data:", roomData);
-                        set((state) => ({ ...state, roomData }));
+                    socket.on("sentRoomdata", ({ problem }) => {
+                        console.log("📌 Received problem:", problem);
+                        set((state) => ({ ...state, problem }));
                     });
 
                     set({ socket });
@@ -39,6 +39,7 @@ export const useBattleStore = create(
             },
 
             setUserInfo: (data) => {
+                
                 set({ userInfo: { ...data, timestamp: Date.now() } });
             },
 

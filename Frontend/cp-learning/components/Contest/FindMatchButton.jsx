@@ -5,7 +5,7 @@ import { Button } from "../ui/button"
 
 const FindMatchButton = ({socket ,isFinding,setIsFinding}) => {
   const {userInfo}=useBattleStore();
-  const { username, current_rating, tags } = userInfo;
+  const { username, current_rating, tags,imageUrl } = userInfo;
   return (
     <Button
     onClick={()=>{
@@ -18,6 +18,7 @@ const FindMatchButton = ({socket ,isFinding,setIsFinding}) => {
          current_rating,
          tags,
          socketId: socket.id,
+         imageUrl
        };
        console.log(user);
        socket.emit("findMatch", { userDetails: user });
@@ -26,6 +27,7 @@ const FindMatchButton = ({socket ,isFinding,setIsFinding}) => {
      
       
     }}
+    className="mt-10"
     >
       {isFinding?"Stop finding":"Find a match"} 
     </Button>

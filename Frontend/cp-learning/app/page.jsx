@@ -17,7 +17,7 @@ export default async function Page() {
   if (!userId) return redirectToSignIn()
     console.log(userId);
   
-  let url=`http://localhost:3000/api/user/id/${userId}`;
+  let url=`http://localhost:3000/api/user/id/${userId}/check`;
 const result = await axios.get(url);
  
    
@@ -32,7 +32,7 @@ const result = await axios.get(url);
   //  console.log(userInfo);
   if(result.status==201){
     
-     return redirect(`/profile`);
+     return redirect(`/profile/you`);
   }
   
   return <div className='w-full h-full   flex flex-col  items-center'>

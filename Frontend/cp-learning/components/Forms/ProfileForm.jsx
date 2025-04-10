@@ -18,13 +18,8 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
-
-
-
 import toast, { Toaster } from "react-hot-toast";
 import { isValidUser } from "@/lib/codeforces";
-
-
 
 const formSchema = z.object({
   username: z.string().min(2, {
@@ -40,9 +35,9 @@ export function ProfileForm() {
       username: "",
     },
   });
+
   const { user } = useUser();
   const router = useRouter();
-
 
   const notify = () => toast.success("Verified");
   const notifyError = () => toast.error("Invalid User");
@@ -50,24 +45,22 @@ export function ProfileForm() {
   async function onSubmit(values) {
     try {
       setLoading(true);
-      console.log(values);
       const { username } = values;
 
-      const result=await isValidUser(username);
-      if(!result){
+      const result = await isValidUser(username);
+      if (!result) {
         notifyError();
         return;
       }
 
       const userId = user.id;
-       
       const response = await axios.post("http://localhost:3000/api/user", {
         username,
         userId,
       });
+
       notify();
-      console.log(response.data);
-      router.push(`/profile`);
+      router.push(`/profile/you`);
     } catch (error) {
       console.error(error);
     } finally {
@@ -79,26 +72,35 @@ export function ProfileForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8 w-96 border-black border-2 p-5 rounded-md"
+        className="space-y-8 w-96 bg-[#1a1a1a] border border-gray-700 p-6 rounded-lg shadow-md"
       >
-        <Toaster/>
+        <Toaster />
         <FormField
           control={form.control}
           name="username"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Username</FormLabel>
+              <FormLabel className="text-gray-300">Username</FormLabel>
               <FormControl>
-                <Input placeholder="shadcn" {...field} disabled={loading} />
+                <Input
+                  className="bg-[#2a2a2a] text-white placeholder-gray-500 border border-gray-600 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="Enter your Codeforces username"
+                  {...field}
+                  disabled={loading}
+                />
               </FormControl>
-              <FormDescription>
+              <FormDescription className="text-gray-400">
                 This is your public display name.
               </FormDescription>
-              <FormMessage />
+              <FormMessage className="text-red-400" />
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={loading}>
+        <Button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold"
+        >
           {loading ? (
             <div className="w-5 h-5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
           ) : (

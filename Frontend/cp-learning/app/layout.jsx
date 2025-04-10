@@ -28,14 +28,14 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <ClerkProvider>
         <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased `}
+          className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#151515]   `}
         >
-          <Toaster/>
+          <Toaster />
           <main className="w-full  min-h-screen  flex flex-col">
             <div className="w-full h-full flex flex-col items-center justify-center ">
               <Nav />
               <Separator />
-              
+
               {children}
             </div>
           </main>
