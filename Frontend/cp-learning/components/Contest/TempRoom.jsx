@@ -12,9 +12,9 @@ import { useBattleStore } from "@/lib/store";
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
-const RoomComp = ({ roomid}) => {
+const RoomComp = ({ roomid,userId}) => {
  
-  const { userId } = useUser();
+  
   const { socket,problem } = useBattleStore();
 
   useEffect(() => {
@@ -65,8 +65,8 @@ const RoomComp = ({ roomid}) => {
       <ResizableHandle />
       <ResizablePanel defaultSize={50}>
         <Tabswitch
-          contestId={contestId}
-          index={index}
+          contestId={problem.contestId}
+          index={problem.index}
           contest={true}
           userId={userId}
         />

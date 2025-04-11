@@ -19,6 +19,7 @@ export async function GET(req, { params }) {
             index: submission.problem.index,
             verdict:submission.verdict
         }
+        console.log(result);
         if (existingUser) {
             return new Response(JSON.stringify(result), { status: 201 });
         }

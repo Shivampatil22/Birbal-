@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import axios from "axios";
+import { useUser } from "@clerk/nextjs";
 
 const frameworks = ["Cpp", "Python", "Javascript"];
 const CodeSection = ({
@@ -17,7 +18,8 @@ const CodeSection = ({
   setCode,
   contestId,
   index,
-  userId,
+  userId
+ 
 }) => {
   const notify = () => toast.success("copied");
   const [submitStatus, setSubmitStatus] = useState("none");
@@ -33,29 +35,35 @@ const CodeSection = ({
     }
   };
 
-  const checkSubmission = async () => {
-    try {
-        setSubmitStatus("loading");
-      let result = await axios.get(
-        `http://localhost:3000/api/user/id/${userId}/problem`
-      );
+const checkSubmission = async () => {
+  try {
+    console.log(userId);
+    setSubmitStatus("loading");
 
-      result = result.data;
-      console.log(result);
-      if(result.contestId==contestId&&result.index==index){
-        if(result.verdict=="WRONG_ANSWER"){
-          setSubmitStatus("wrong");
-        }
-        else{
-          setSubmitStatus("correct")
-        }
-      }
-      else{
+    let result = await axios.get(
+      `http://localhost:3000/api/user/id/${userId}/problem`
+    );
 
+    result = result.data;
+    console.log(result);
+
+    if (result.contestId == contestId && result.index == index) {
+      if (result.verdict == "WRONG_ANSWER") {
+        setSubmitStatus("wrong");
+      } else {
+        console.log("ok");
+        setSubmitStatus("correct");
       }
-      setSubmitStatus("not_submitted");
-    } catch (error) {}
-  };
+    } else {
+      setSubmitStatus("not_submitted"); // only if it doesn't match
+    }
+  } catch (error) {
+    console.error("Error checking submission:", error);
+    toast.error("Failed to check submission");
+    setSubmitStatus("not_submitted");
+  }
+};
+
 
   return (
     <section className="w-full flex flex-col flex-1 min-h-full bg-[#272727]  rounded-lg ml-2 ">
@@ -96,17 +104,17 @@ const CodeSection = ({
               </div>
             </>
           )}
-          {submitStatus === "not_submitted" && (
+          {submitStatus == "not_submitted" && (
             <span className="text-xl font-semibold bg-[#393939] flex w-full h-[90%] items-center   justify-center ">
               Problem not submitted
             </span>
           )}
-          {submitStatus === "wrong" && (
+          {submitStatus == "wrong" && (
             <span className="text-red-500  text-xl font-semibold bg-[#393939] flex w-full h-[90%] items-center   justify-center">
               Wrong Answer
             </span>
           )}
-          {submitStatus === "correct" && (
+          {submitStatus == "correct" && (
             <span className="text-green-500 text-xl font-semibold bg-[#393939] flex w-full h-[90%] items-center   justify-center">
               Accepted
             </span>
