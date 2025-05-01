@@ -12,14 +12,14 @@ import { useBattleStore } from "@/lib/store";
 import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 
-const RoomComp = ({ roomid,userId}) => {
- 
-  
-  const { socket,problem } = useBattleStore();
+const RoomComp = ({ roomid, userId }) => {
+
+
+  const { socket, problem } = useBattleStore();
 
   useEffect(() => {
     console.log(roomid);
-    socket.emit("joinRoom", {roomId: roomid });
+    socket.emit("joinRoom", { roomId: roomid });
     socket.emit("getRoomdata", { roomId: roomid });
   }, [roomid, socket]);
 
@@ -69,6 +69,7 @@ const RoomComp = ({ roomid,userId}) => {
           index={problem.index}
           contest={true}
           userId={userId}
+          roomId={roomid}
         />
       </ResizablePanel>
     </ResizablePanelGroup>
