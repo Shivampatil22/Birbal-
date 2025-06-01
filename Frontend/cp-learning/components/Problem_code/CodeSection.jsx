@@ -50,6 +50,8 @@ const CodeSection = ({
   };
 
   const checkSubmission = async () => {
+    const start = performance.now(); // Start measuring
+
     try {
       setSubmitStatus("loading");
 
@@ -73,9 +75,11 @@ const CodeSection = ({
       console.error("Error checking submission:", error);
       toast.error("Failed to check submission");
       setSubmitStatus("not_submitted");
+    } finally {
+      const end = performance.now(); // End measuring
+      console.log(`🕒 UI Response Time: ${(end - start).toFixed(2)} ms`);
     }
   };
-
   return (
     <section className="w-full flex flex-col flex-1 min-h-full bg-[#272727] rounded-lg ml-2 ">
       <div className="flex w-full justify-between mt-3 pr-6">

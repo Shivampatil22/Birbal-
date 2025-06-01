@@ -14,6 +14,8 @@ const io = new Server(server, {
 });
 
 const BASE_URL = "https://codeforces.com/api";
+let totalFetchAttempts = 0;
+let successfulFetches = 0;
 
 app.use(cors());
 app.use(express.json());
@@ -26,8 +28,10 @@ io.on("connection", (socket) => {
   console.log("User connected:", socket.id);
 
   socket.on("findMatch", async ({ userDetails }) => {
+    const matchStartTime = Date.now(); // ⏱ Match start time
     try {
       const { username, current_rating, tags } = userDetails;
+
       const existingIndex = waitingList.findIndex(user => user.username === username);
       if (existingIndex !== -1) {
         waitingList.splice(existingIndex, 1);
@@ -49,15 +53,23 @@ io.on("connection", (socket) => {
           const uniqueTags = [...new Set([...tags, ...opponent.tags])];
           const randomTag = uniqueTags[Math.floor(Math.random() * uniqueTags.length)];
 
+          totalFetchAttempts++;
+
           const response = await axios.get(`${BASE_URL}/problemset.problems`, {
             params: { tags: randomTag },
           });
 
-          const problems = response.data.result.problems
+          let problems = response.data.result.problems
             .filter(problem => problem.rating === rating_to_play)
             .slice(0, 100);
 
-          if (!problems.length) throw new Error("No suitable problems found.");
+          const problemFetchSuccess = problems.length > 0;
+          if (problemFetchSuccess) successfulFetches++;
+
+          console.log(`Problem Fetch - Users: ${username} vs ${opponent.username}, Tag: ${randomTag}, Success: ${problemFetchSuccess}`);
+          console.log(`Total Attempts: ${totalFetchAttempts}, Successful Fetches: ${successfulFetches}`);
+
+          if (!problemFetchSuccess) throw new Error("No suitable problems found.");
 
           const problem = problems[Math.floor(Math.random() * problems.length)];
 
@@ -78,6 +90,10 @@ io.on("connection", (socket) => {
             roomId
           };
           battleRooms[roomId] = roomData;
+
+          const matchEndTime = Date.now();
+          const matchmakingTime = matchEndTime - matchStartTime;
+          console.log(`Matchmaking Time: ${matchmakingTime} ms`);
 
           io.to(opponent.socketId).emit("matchFound", { roomId, opponent: userDetails });
           io.to(socket.id).emit("matchFound", { roomId, opponent });
@@ -131,20 +147,18 @@ io.on("connection", (socket) => {
   });
 
   socket.on("battleDone", ({ roomId, userId }) => {
-  try {
-    if (battleRooms[roomId]) {
-      io.to(roomId).emit("battleWinner", { winner: userId });
-      
-      delete battleRooms[roomId];
-      console.log(`Battle over. Winner: ${userId}`);
+    try {
+      if (battleRooms[roomId]) {
+        io.to(roomId).emit("battleWinner", { winner: userId });
+        delete battleRooms[roomId];
+        console.log(`Battle over. Winner: ${userId}`);
+      }
+    } catch (err) {
+      console.error("Error in battleDone:", err);
     }
-  } catch (err) {
-    console.error("Error in battleDone:", err);
-  }
-});
+  });
 
   // DRAW OFFER LOGIC
-
   socket.on("offerDraw", ({ roomId, senderId }) => {
     const room = battleRooms[roomId];
     if (!room) return;
