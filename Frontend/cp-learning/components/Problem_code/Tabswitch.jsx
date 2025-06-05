@@ -7,7 +7,7 @@ import { Bot, Code, Handshake } from "lucide-react";
 import CodeSection from "./CodeSection";
 import { useBattleStore } from "@/lib/store";
 import { toast } from "react-hot-toast";
-
+import Aichatbot from "./Aichatbot";
 const Tabswitch = ({ contestId, index, userId, contest, roomId }) => {
   const { socket } = useBattleStore();
   const router = useRouter();
@@ -125,7 +125,7 @@ const Tabswitch = ({ contestId, index, userId, contest, roomId }) => {
           <div>
             <h3 className="text-lg font-semibold">AI Bot</h3>
             <div className="mt-2 text-gray-300">
-              Your AI assistant will go here.
+              <Aichatbot/>
             </div>
           </div>
         )}

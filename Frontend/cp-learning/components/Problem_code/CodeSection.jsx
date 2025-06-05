@@ -30,13 +30,13 @@ const CodeSection = ({
   const [winnerId, setWinnerId] = useState(null);
 
   useEffect(() => {
-    socket.on("battleWinner", ({ winner }) => {
+    socket?.on("battleWinner", ({ winner }) => {
       setWinnerId(winner);
       setShowWinnerPopup(true);
     });
 
     return () => {
-      socket.off("battleWinner");
+      socket?.off("battleWinner");
     };
   }, []);
 
