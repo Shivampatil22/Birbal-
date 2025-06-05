@@ -17,7 +17,7 @@ const ProfileSideBar = ({ profile, analyzeProfile, loading }) => {
       </div>
     );
   }
-
+  // console.log(profile.userId)
   return (
     <div className="w-full h-full flex flex-col bg-[#1F1F1F] text-white rounded-xl p-4">
       <div className="flex w-full h-1/3 flex-col gap-4 p-2">
@@ -52,10 +52,10 @@ const ProfileSideBar = ({ profile, analyzeProfile, loading }) => {
       {/* Links for "Solved Problems" and "Contest History" */}
       <div className="flex flex-col gap-4 mt-6 w-full items-center">
         <Link
-          href="/id/solved-problems"
+          href={`/id/saved-problems?userId=${profile.userId}`}
           className="text-lg text-white bg-[#151515] hover:bg-white w-full hover:text-black  rounded-lg px-4 py-2 text-center transition duration-200"
         >
-          Solved Problems
+          Saved Problems
         </Link>
         <Link
           href="/id/contest-history"
