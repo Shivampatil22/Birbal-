@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
 
           try {
             await axios.post(
-              `http://localhost:3000/api/problem/${problem.contestId}/${problem.index}`,
+              `https://birbal-nine.vercel.app/api/problem/${problem.contestId}/${problem.index}`,
               { problem }
             );
           } catch (err) {

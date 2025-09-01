@@ -17,7 +17,7 @@ const ProblemDescription = ({ contestId, index, contest,problemMeta}) => {
         // console.log(contestId, index,problemMeta);
         if(contestId === undefined || index === undefined) return;
         const res = await axios.post(
-          ` http://localhost:3000/api/problem/${contestId}/${index}`,{problem:problemMeta}
+          ` NEXT_FRONTEND_URL/api/problem/${contestId}/${index}`,{problem:problemMeta}
         );
         setProblemData(res.data);
       } catch (error) {

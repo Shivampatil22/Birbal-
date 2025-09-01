@@ -16,7 +16,7 @@ const SaveButton = ({ problemId, userId }) => {
     try {
       setLoading(true);
       const res = await axios.patch(
-       `http://localhost:3000/api/user/${userId}/save/${problemId}`
+       `NEXT_FRONTEND_URL/api/user/${userId}/save/${problemId}`
       );
       if (res.status === 200) {
         setIsSaved((prev) => !prev);
