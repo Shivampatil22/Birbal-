@@ -13,7 +13,7 @@ export const useBattleStore = create(
 
             connectSocket: () => {
                 if (!get().socket) {
-                    const socket = io("http://localhost:8000");
+                    const socket = io("https://birbal.onrender.com/");
 
                     // Register event listeners
                     socket.on("matchFound", ({ roomId,opponent }) => {

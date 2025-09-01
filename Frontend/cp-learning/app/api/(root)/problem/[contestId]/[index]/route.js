@@ -39,7 +39,7 @@ export async function POST(req, { params }) {
 
         // Scrape additional problem data
         const res = await axios.get(
-            `http://localhost:8000/api/problem/${contestId}/${index}`
+            `https://birbal.onrender.com/api/problem/${contestId}/${index}`
         );
         const data = res.data;
 
