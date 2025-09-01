@@ -17,7 +17,7 @@ export default async function Page() {
   if (!userId) return redirectToSignIn()
     console.log(userId);
   
-  let url=`NEXT_FRONTEND_URL/api/user/id/${userId}/check`;
+  let url=`${NEXT_FRONTEND_URL}/api/user/id/${userId}/check`;
 const result = await axios.get(url);
  
    
