@@ -54,7 +54,7 @@ export function ProfileForm() {
       }
 
       const userId = user.id;
-      const response = await axios.post("${NEXT_FRONTEND_URL}/api/user", {
+      const response = await axios.post("https://birbal-nine.vercel.app/api/user", {
         username,
         userId,
       });

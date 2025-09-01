@@ -16,7 +16,7 @@ const SaveButton = ({ problemId, userId }) => {
     try {
       setLoading(true);
       const res = await axios.patch(
-       `${NEXT_FRONTEND_URL}/api/user/${userId}/save/${problemId}`
+       `https://birbal-nine.vercel.app/api/user/${userId}/save/${problemId}`
       );
       if (res.status === 200) {
         setIsSaved((prev) => !prev);

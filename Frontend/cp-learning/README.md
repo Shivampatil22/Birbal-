@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-Open [${NEXT_FRONTEND_URL}](${NEXT_FRONTEND_URL}) with your browser to see the result.
+Open [https://birbal-nine.vercel.app](https://birbal-nine.vercel.app) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 

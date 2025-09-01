@@ -56,7 +56,7 @@ const CodeSection = ({
       setSubmitStatus("loading");
 
       let result = await axios.get(
-        `${NEXT_FRONTEND_URL}/api/user/id/${userId}/problem`
+        `https://birbal-nine.vercel.app/api/user/id/${userId}/problem`
       );
 
       result = result.data;
