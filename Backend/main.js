@@ -75,7 +75,7 @@ io.on("connection", (socket) => {
 
           try {
             await axios.post(
-              `NEXT_PUBLIC_FRONTEND_URL/api/problem/${problem.contestId}/${problem.index}`,
+              `http://localhost:3000/api/problem/${problem.contestId}/${problem.index}`,
               { problem }
             );
           } catch (err) {

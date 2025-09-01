@@ -54,7 +54,7 @@ export function ProfileForm() {
       }
 
       const userId = user.id;
-      const response = await axios.post("NEXT_PUBLIC_FRONTEND_URL/api/user", {
+      const response = await axios.post("http://localhost:3000/api/user", {
         username,
         userId,
       });

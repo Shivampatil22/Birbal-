@@ -66,7 +66,7 @@ const ProfileData = ({ profile_id }) => {
 
   const getProfileData = async () => {
     const result = await axios.get(
-      `NEXT_PUBLIC_FRONTEND_URL/api/user/id/${profile_id}`
+      `http://localhost:3000/api/user/id/${profile_id}`
     );
 
     const userDetails = result.data;
@@ -91,7 +91,7 @@ const ProfileData = ({ profile_id }) => {
     try {
       setLoading(true);
       const result = await axios.post(
-        `NEXT_PUBLIC_FRONTEND_URL/api/analyze/${profile.username}`
+        `http://localhost:3000/api/analyze/${profile.username}`
       );
 
       setProfile(result.data);

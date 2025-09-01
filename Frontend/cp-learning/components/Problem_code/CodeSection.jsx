@@ -56,7 +56,7 @@ const CodeSection = ({
       setSubmitStatus("loading");
 
       let result = await axios.get(
-        `NEXT_PUBLIC_FRONTEND_URL/api/user/id/${userId}/problem`
+        `http://localhost:3000/api/user/id/${userId}/problem`
       );
 
       result = result.data;
