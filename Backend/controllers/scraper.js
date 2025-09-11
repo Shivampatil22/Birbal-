@@ -107,25 +107,60 @@ const FetchQuestion = async (constestId, index) => {
         launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
     }
 
-    const browser = await puppeteer.launch(launchOptions);
-    const page = await browser.newPage();
+    let browser;
+    let page;
+    try {
+        browser = await puppeteer.launch(launchOptions);
+        page = await browser.newPage();
 
-    // Spoof User-Agent
-    await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36');
+        // Performance: block heavy resources
+        await page.setRequestInterception(true);
+        page.on('request', (req) => {
+            const resourceType = req.resourceType();
+            if (resourceType === 'image' || resourceType === 'media' || resourceType === 'font') {
+                return req.abort();
+            }
+            req.continue();
+        });
 
-    // Visit the target website
-    await page.goto(`https://codeforces.com/contest/${constestId}/problem/${index}`, { waitUntil: 'networkidle0' });
+        // Timeouts and UA
+        page.setDefaultNavigationTimeout(60000);
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/133.0.0.0 Safari/537.36');
 
-    // Scrape content
-    const data = await page.evaluate(() => {
-        const problemStatement = document.querySelector('.problem-statement');
-        return problemStatement ? problemStatement.innerText : null;
-    });
+        const url = `https://codeforces.com/contest/${constestId}/problem/${index}`;
 
-    // console.log("Scraped Data:", parseProblemData(data));
+        // Navigate with retry for transient detach errors
+        const gotoOnce = async () => {
+            return page.goto(url, { waitUntil: 'domcontentloaded', timeout: 45000 });
+        };
 
-    await browser.close();
-    return parseProblemData(data);
+        try {
+            await gotoOnce();
+        } catch (err) {
+            if (String(err.message || err).includes('frame was detached') || String(err.message || err).includes('frame got detached')) {
+                await page.waitForTimeout(1000);
+                await gotoOnce();
+            } else {
+                throw err;
+            }
+        }
+
+        await page.waitForSelector('.problem-statement', { timeout: 20000 });
+
+        const data = await page.evaluate(() => {
+            const problemStatement = document.querySelector('.problem-statement');
+            return problemStatement ? problemStatement.innerText : null;
+        });
+
+        if (!data) {
+            throw new Error('Failed to locate problem statement');
+        }
+
+        return parseProblemData(data);
+    } finally {
+        try { if (page) await page.close({ runBeforeUnload: true }); } catch { }
+        try { if (browser) await browser.close(); } catch { }
+    }
 };
 
 
