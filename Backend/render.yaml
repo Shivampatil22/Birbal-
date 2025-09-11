@@ -9,3 +9,7 @@ services:
         value: production
       - key: PORT
         value: 8000
+      - key: PUPPETEER_CACHE_DIR
+        value: /opt/render/.cache/puppeteer
+      - key: PUPPETEER_EXECUTABLE_PATH
+        value: /opt/render/.cache/puppeteer/chrome/linux-133.0.6943.98/chrome-linux64/chrome

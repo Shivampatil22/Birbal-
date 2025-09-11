@@ -88,7 +88,26 @@ const FetchQuestion = async (constestId, index) => {
 
     lastCallTime = now; // Update the last call time
 
-    const browser = await puppeteer.launch({ headless: true });
+    const isRender = process.env.RENDER; // Render sets this env var
+    const launchOptions = {
+        headless: true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--no-zygote',
+            '--single-process'
+        ]
+    };
+
+    // On Render, explicitly set executablePath to the installed Chrome if available
+    // Puppeteer v24 supports chromium path auto-detection, but on minimal images we help it.
+    if (isRender && process.env.PUPPETEER_EXECUTABLE_PATH) {
+        launchOptions.executablePath = process.env.PUPPETEER_EXECUTABLE_PATH;
+    }
+
+    const browser = await puppeteer.launch(launchOptions);
     const page = await browser.newPage();
 
     // Spoof User-Agent
