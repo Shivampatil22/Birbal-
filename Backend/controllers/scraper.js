@@ -103,10 +103,14 @@ const FetchQuestion = async (constestId, index) => {
 
     // On Render, explicitly set executablePath to the installed Chrome if available
     // Puppeteer v24 supports chromium path auto-detection, but on minimal images we help it.
-    // Prefer env override if provided, else let puppeteer resolve its installed path
-    const resolvedExecPath = process.env.PUPPETEER_EXECUTABLE_PATH || (typeof puppeteer.executablePath === 'function' ? puppeteer.executablePath() : undefined);
-    if (resolvedExecPath) {
-        launchOptions.executablePath = resolvedExecPath;
+    // Always use Puppeteer's resolved executable path to avoid stale env overrides
+    if (typeof puppeteer.executablePath === 'function') {
+        try {
+            const resolvedExecPath = puppeteer.executablePath();
+            if (resolvedExecPath) {
+                launchOptions.executablePath = resolvedExecPath;
+            }
+        } catch { }
     }
 
     let browser;
